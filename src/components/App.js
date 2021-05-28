@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { uuid } from "uuidv4";
 import { HashRouter as Router, Switch, Route } from "react-router-dom";
 import ContactDetail from "./ContactDetail";
-import api from "../api/contacts";
+// import api from "../api/contacts";
 import EditContact from "./EditContact";
 
 function App() {
