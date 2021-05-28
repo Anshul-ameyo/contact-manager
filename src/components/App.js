@@ -4,7 +4,7 @@ import Header from "./Header";
 import ContactList from "./ContactList";
 import { useEffect, useState } from "react";
 import { uuid } from "uuidv4";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { HashRouter as Router, Switch, Route } from "react-router-dom";
 import ContactDetail from "./ContactDetail";
 import api from "../api/contacts";
 import EditContact from "./EditContact";
