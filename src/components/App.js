@@ -10,45 +10,57 @@ import api from "../api/contacts";
 import EditContact from "./EditContact";
 
 function App() {
-  // const LOCAL_STORAGE_KEY = "contacts";//key for localStorage
+  const LOCAL_STORAGE_KEY = "contacts"; //key for localStorage
   const [contacts, setContacts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
 
-  //Retrieve contacts from dummy server
-  const retrieveContacts = async () => {
-    const response = await api.get("/contacts");
-    return response.data;
-  };
+  // /*API CALL FOR FIRST TIME RETRIEVING DATA FROM SERVER*/
+  // useEffect(() => {
+  //   const getAllContacts = async () => {
+  //     const allContacts = await retrieveContacts();
+  //     if (allContacts) {
+  //       setContacts(allContacts);
+  //     }
+  //   };
+  //   getAllContacts();
+  // }, []);
 
-  const addContactHandler = async (contact) => {
-    const request = {
-      id: uuid(),
-      ...contact,
-    };
+  ///* API CALLS FOR CRUD OPERATIONS */
+  // const retrieveContacts = async () => {
+  //   const response = await api.get("/contacts");
+  //   return response.data;
+  // };
 
-    const response = await api.post("/contacts", request);
-    setContacts([...contacts, response.data]);
-  };
+  // const addContactHandler = async (contact) => {
+  //   const request = {
+  //     id: uuid(),
+  //     ...contact,
+  //   };
 
-  const removeContactHandler = async (id) => {
-    await api.delete(`/contacts/${id}`);
-    const newContactList = contacts.filter((contact) => {
-      return contact.id !== id;
-    });
-    setContacts(newContactList);
-  };
+  //   const response = await api.post("/contacts", request);
+  //   setContacts([...contacts, response.data]);
+  // };
 
-  const updateContactHandler = async (contact) => {
-    const response = await api.put(`/contacts/${contact.id}`, contact);
-    const { id } = response.data;
-    setContacts(
-      contacts.map((contact) => {
-        return contact.id === id ? { ...response.data } : contact;
-      })
-    );
-  };
+  // const removeContactHandler = async (id) => {
+  //   await api.delete(`/contacts/${id}`);
+  //   const newContactList = contacts.filter((contact) => {
+  //     return contact.id !== id;
+  //   });
+  //   setContacts(newContactList);
+  // };
 
+  // const updateContactHandler = async (contact) => {
+  //   const response = await api.put(`/contacts/${contact.id}`, contact);
+  //   const { id } = response.data;
+  //   setContacts(
+  //     contacts.map((contact) => {
+  //       return contact.id === id ? { ...response.data } : contact;
+  //     })
+  //   );
+  // };
+
+  /* SEARCHING DATA */
   const searchHandler = (searchTerm) => {
     setSearchTerm(searchTerm);
     if (searchTerm !== "") {
@@ -65,30 +77,40 @@ function App() {
     }
   };
 
+  /* ADDING DATA IN localStorage */
+  const addContactHandler = (contact) => {
+    setContacts([...contacts, { id: uuid(), ...contact }]);
+  };
+
+  /* REMOVING DATA IN localStorage */
+  const removeContactHandler = (id) => {
+    const newContactList = contacts.filter((contact) => {
+      return contact.id !== id;
+    });
+
+    setContacts(newContactList);
+  };
+
+  /* UPDATING DATA IN localStorage */
+  const updateContactHandler = (updatedContact) => {
+    setContacts(
+      contacts.map((item) => {
+        return item.id === updatedContact.id ? { ...updatedContact } : item;
+      })
+    );
+  };
+
+  /* FETCH DATA FROM localStorage FOR FIRST TIME */
   useEffect(() => {
-    //
-    //*fetching data locally*
-    // const retrieveContacts = JSON.parse(
-    //   localStorage.getItem(LOCAL_STORAGE_KEY)
-    // );
-    // if (retrieveContacts) setContacts(retrieveContacts);
-    //
-
-    const getAllContacts = async () => {
-      const allContacts = await retrieveContacts();
-      if (allContacts) {
-        setContacts(allContacts);
-      }
-    };
-
-    getAllContacts();
+    const retrieveContacts = JSON.parse(
+      localStorage.getItem(LOCAL_STORAGE_KEY)
+    );
+    if (retrieveContacts) setContacts(retrieveContacts);
   }, []);
 
+  /*  SAVING DATA LOCALLY IN BROWSER */
   useEffect(() => {
-    //
-    //*saving data locally in browser*
-    //localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(contacts));
-    //
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(contacts));
   }, [contacts]);
 
   return (

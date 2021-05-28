@@ -3,9 +3,9 @@ import ContactCard from "./ContactCard";
 import { Link } from "react-router-dom";
 
 const ContactList = (props) => {
-  // const deleteContactHandler = (id) => {
-  //   props.removeContactHandler(id);
-  // };
+  const deleteContactHandler = (id) => {
+    props.removeContactHandler(id);
+  };
 
   const inputElement = useRef("");
 
@@ -13,14 +13,13 @@ const ContactList = (props) => {
     return (
       <ContactCard
         contact={contact}
-        removeContactHandler={props.removeContactHandler}
+        removeContactHandler={deleteContactHandler}
         key={contact.id}
       />
     );
   });
 
   const getSearchTerm = () => {
-    //console.log(inputElement.current.value);
     props.searchKeyword(inputElement.current.value);
   };
 
